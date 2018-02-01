@@ -1,6 +1,6 @@
 #a simple weighted, directed graph implementation with support for common graph algorithms
-#implented: bfs, dfs
-#pending: topo sort, kahn's, dijkstra's, bellman-ford's, prim's, kruskal's 
+#implemented: bfs, dfs, kahn's topological ordering, 
+#pending: topo sort, dijkstra's, bellman-ford's, prim's, kruskal's 
 class Vertex:
     def __init__(self, i):
         self.id = i
@@ -55,6 +55,7 @@ class Graph:
                     q.append(neighbor)
     #kahn's topological ordering algorithm
     def kahn(self):
+        #setup phase
         inEdges = {}
         for i in range(self.totNodes):
             inEdges[i]=0
@@ -62,7 +63,8 @@ class Graph:
             for j in range(self.totNodes):
                 if self.adjMatrix[i][j]!=-1:
                     inEdges[j]=inEdges[j]+1
-        '''
+        #setup complete
+        '''dict printer
         for i in range(self.totNodes):
             if i in inEdges:
                 print('{0}:{1}'.format(i,inEdges[i]))
@@ -77,6 +79,8 @@ class Graph:
                         if self.adjMatrix[i][j]!=-1:
                             self.adjMatrix[i][j]=-1
                             inEdges[j]=inEdges[j]-1
+    #dfs based topological ordering algorithm
+    
 
 if __name__=='__main__':
     G = Graph(5)
