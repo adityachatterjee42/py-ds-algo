@@ -1,4 +1,6 @@
-#a simple directed graph implementation with support for common graph algorithms
+#a simple weighted, directed graph implementation with support for common graph algorithms
+#implented: bfs, dfs
+#pending: topo sort, kahn's, dijkstra's, bellman-ford's, prim's, kruskal's 
 class Vertex:
     def __init__(self, i):
         self.id = i
@@ -26,6 +28,7 @@ class Graph:
             print()
     def getVertex(self, id):
         return(self.vertices[id])
+    #depth-first search
     def dfs(self, id):
         self.dfsRecur(id, set())
     def dfsRecur(self, id, visitedSet):
@@ -37,6 +40,7 @@ class Graph:
             for neighbor in self.vertices[id].getNeighbors():
                 visitedSet = self.dfsRecur(neighbor, visitedSet)
         return visitedSet
+    #breadth-first search
     def bfs(self, id):
         q = []
         visitedSet = set()
@@ -49,7 +53,30 @@ class Graph:
                 if n not in visitedSet:
                     neighbor = self.vertices[n]
                     q.append(neighbor)
+    #kahn's topological ordering algorithm
+    def kahn(self):
+        inEdges = {}
+        for i in range(self.totNodes):
+            inEdges[i]=0
+        for i in range(self.totNodes):
+            for j in range(self.totNodes):
+                if self.adjMatrix[i][j]!=-1:
+                    inEdges[j]=inEdges[j]+1
+        '''
+        for i in range(self.totNodes):
+            if i in inEdges:
+                print('{0}:{1}'.format(i,inEdges[i]))
 
+        '''
+        while(inEdges):
+            for i in range(self.totNodes):
+                if i in inEdges and inEdges[i]==0:
+                    print('at node {0}'.format(i))
+                    inEdges.pop(i)
+                    for j in range(self.totNodes):
+                        if self.adjMatrix[i][j]!=-1:
+                            self.adjMatrix[i][j]=-1
+                            inEdges[j]=inEdges[j]-1
 
 if __name__=='__main__':
     G = Graph(5)
@@ -58,10 +85,13 @@ if __name__=='__main__':
     G.addEdge(1,2,0)
     G.addEdge(0,3,0)
     G.addEdge(2,4,0)
+    G.addEdge(0,2,0)
+    G.addEdge(3,2,0)
+    #G.addEdge(1,4,0)
     print('adjacency matrix')
     G.printAdjMatrix()
-    print('dfs')
-    G.dfs(1)
-    print('bfs')
-    G.bfs(1)
-    
+    #print('dfs')
+    #G.dfs(1)
+    #print('bfs')
+    #G.bfs(1)
+    G.kahn()
