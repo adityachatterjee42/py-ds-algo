@@ -1,65 +1,51 @@
-class Vertex:
-    def __init__(self, node):
-        self.id = node
-        self.visited = False
-    def addNeighbor(self, neighbor, G):
-        G.addEdge(self.id, neighbor)
-    def getConnections(self, G):
-        return G.adjMatrix[self.id]
-    def getVertexID(self):
-        return self.id
-    def setVertexID(self, id):
-        self.id = id
-    def setVisited(self):
-        self.visited = True
-    def __str__(self):
-        return str(self.id)
-
 class Graph:
-    def __init__(self, numVertices, cost=0):
-        self.adjMatrix = [[-1]*numVertices for i in range(numVertices)]
-        self.numVertices = numVertices
+    def __init__(self, totNodes):
         self.vertices = []
-        for i in range(0, numVertices):
-            newVertex = Vertex(i)
-            self.vertices.append(newVertex)
-    def setVertex(self, vtx, id):
-        if 0<=vtx<self.numVertices:
-                self.vertices[vtx].setVertexID(id)
-    def getVertex(self, n):
-        for vertxin in range(self.numVertices):
-            if n == self.vertices[vertxin].getVertexID():
-                return vertxin
-            else:
-                return -1
-    def addEdge(self, frm, to, cost=0):
-        if self.getVertex(frm)!=-1 and self.getVertex(to)!=-1:
-            self.adjMatrix[self.getVertex(frm)][self.getVertex(to)] = cost
-            self.adjMatrix[self.getVertex(to)][self.getVertex(frm)] = cost
-    def getVertices(self):
-        vertices=[]
-        for vertexin in range(0,self.numVertices):
-            vertices.append(self.vertices[vertxin].getVertexID())
-        return vertices
-    def printMatrix(self):
-        for u in range(0,self.numVertices):
-            row=[]
-            for v in range(0,self.numVertices):
-                row.append(self.adjMatrix[u][v])
-            print(row)
-    def getEdges(self):
-        edges=[]
-        for v in range(0,self.numVertices):
-            for u in range(0,self.numVertices):
-                if self.adjMatrix[u][v]!=-1:
-                    vid=self.vertices[v].getVertexID()
-                    uid=self.vertices[u].getVertexID()
-                    edges.append((vid, uid, self.adjMatrix[u][v]))
-        return edges
+        for i in range(totNodes):
+            self.vertices.append(Vertex(i))
+        self.adjMatrix = [[-1]*totNodes for i in range(totNodes)]
+        self.totNodes = totNodes
+    def addEdge(self, frm, to, cost):
+        if(0<=frm<self.totNodes and 0<=to<self.totNodes):
+            self.adjMatrix[frm][to]=cost
+            self.vertices[frm].addNeighbor(to)
+    def printAdjMatrix(self):
+        for i in range(self.totNodes):
+            for j in range(self.totNodes):
+                print(self.adjMatrix[i][j], end='\t')
+            print()
+    def getVertex(self, id):
+        return(self.vertices[id])
+    def dfs(self, id):
+        self.dfsRecur(id, set())
+    def dfsRecur(self, id, visitedSet):
+        if id in visitedSet:
+            pass
+        else:
+            print('at node {0}'.format(id))
+            visitedSet.add(id)
+            for neighbor in self.vertices[id].getNeighbors():
+                visitedSet = self.dfsRecur(neighbor, visitedSet)
+        return visitedSet
 
 
 
+class Vertex:
+    def __init__(self, i):
+        self.id = i
+        self.neighbors = []
+    def addNeighbor(self, neighbor):
+        self.neighbors.append(neighbor)
+    def getNeighbors(self):
+        return self.neighbors
 
-
-
-
+if __name__=='__main__':
+    G = Graph(4)
+    #G.printAdjMatrix()
+    G.addEdge(0,1,0)
+    G.addEdge(1,0,0)
+    G.addEdge(1,2,0)
+    G.addEdge(2,3,0)
+    G.addEdge(3,4,0)
+    G.printAdjMatrix()
+    G.dfs(1)
