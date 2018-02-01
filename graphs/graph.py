@@ -1,3 +1,13 @@
+#a simple directed graph implementation with support for common graph algorithms
+class Vertex:
+    def __init__(self, i):
+        self.id = i
+        self.neighbors = []
+    def addNeighbor(self, neighbor):
+        self.neighbors.append(neighbor)
+    def getNeighbors(self):
+        return self.neighbors
+
 class Graph:
     def __init__(self, totNodes):
         self.vertices = []
@@ -27,25 +37,31 @@ class Graph:
             for neighbor in self.vertices[id].getNeighbors():
                 visitedSet = self.dfsRecur(neighbor, visitedSet)
         return visitedSet
+    def bfs(self, id):
+        q = []
+        visitedSet = set()
+        q.append(self.vertices[id])
+        while q:
+            curVertex = q.pop(0)
+            print('at node {0}'.format(curVertex.id))
+            visitedSet.add(curVertex.id)
+            for n in curVertex.getNeighbors():
+                if n not in visitedSet:
+                    neighbor = self.vertices[n]
+                    q.append(neighbor)
 
-
-
-class Vertex:
-    def __init__(self, i):
-        self.id = i
-        self.neighbors = []
-    def addNeighbor(self, neighbor):
-        self.neighbors.append(neighbor)
-    def getNeighbors(self):
-        return self.neighbors
 
 if __name__=='__main__':
-    G = Graph(4)
+    G = Graph(5)
     #G.printAdjMatrix()
-    G.addEdge(0,1,0)
     G.addEdge(1,0,0)
     G.addEdge(1,2,0)
-    G.addEdge(2,3,0)
-    G.addEdge(3,4,0)
+    G.addEdge(0,3,0)
+    G.addEdge(2,4,0)
+    print('adjacency matrix')
     G.printAdjMatrix()
+    print('dfs')
     G.dfs(1)
+    print('bfs')
+    G.bfs(1)
+    
