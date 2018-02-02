@@ -1,5 +1,6 @@
+from queue import Queue
 #a simple weighted, directed graph implementation with support for common graph algorithms
-#implemented: bfs, dfs, kahn's topological ordering, 
+#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest path
 #pending: topo sort, dijkstra's, bellman-ford's, prim's, kruskal's 
 class Vertex:
     def __init__(self, i):
@@ -26,6 +27,8 @@ class Graph:
             for j in range(self.totNodes):
                 print(self.adjMatrix[i][j], end='\t')
             print()
+    def getVertices(self):
+        return self.vertices
     def getVertex(self, id):
         return(self.vertices[id])
     #depth-first search
@@ -63,7 +66,7 @@ class Graph:
             for j in range(self.totNodes):
                 if self.adjMatrix[i][j]!=-1:
                     inEdges[j]=inEdges[j]+1
-        #setup complete
+        #setup complete (wouldn't need this step if using adjacency list)
         '''dict printer
         for i in range(self.totNodes):
             if i in inEdges:
@@ -79,7 +82,32 @@ class Graph:
                         if self.adjMatrix[i][j]!=-1:
                             self.adjMatrix[i][j]=-1
                             inEdges[j]=inEdges[j]-1
-    #dfs based topological ordering algorithm
+    #unweighted shortest paths
+    def unwtSP(self, startId):
+        q = Queue()
+        distanceDict={}
+        predecessorDict={}
+        visitedSet=set()
+        for vertex in self.getVertices():
+            distanceDict[vertex.id]=-1
+            predecessorDict[vertex.id]=None
+        distanceDict[startId]=0
+        q.put(startId)
+        while(q.qsize()>0):
+            curVertex=q.get()
+            for neighbor in self.getVertex(curVertex).getNeighbors():
+                if neighbor not in visitedSet:
+                    visitedSet.add(neighbor)
+                    distanceDict[neighbor]=distanceDict[curVertex]+1
+                    predecessorDict[neighbor]=curVertex
+                    q.put(neighbor)
+        for x,y in distanceDict.items():
+            print("Vertex:{0} Distance{1}".format(x,y))
+
+
+    
+
+
     
 
 if __name__=='__main__':
@@ -98,4 +126,6 @@ if __name__=='__main__':
     #G.dfs(1)
     #print('bfs')
     #G.bfs(1)
-    G.kahn()
+    #G.kahn()
+    G.unwtSP(1)
+    
