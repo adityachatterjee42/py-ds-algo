@@ -1,7 +1,7 @@
 from queue import Queue
 #a simple weighted, directed graph implementation with support for common graph algorithms
-#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest paths
-#pending: dfs topological ordering, dijkstra's, bellman-ford's, prim's, kruskal's 
+#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest paths, dijkstra's
+#pending: dfs topological ordering, bellman-ford, prim's, kruskal's 
 class Vertex:
     def __init__(self, i):
         self.id = i
@@ -110,6 +110,8 @@ class Graph:
     def dijkstra(self, startId):
         verticeSet = set([vertex.id for vertex in self.getVertices()])
         distanceDict = {} 
+        predDict = {}
+        predDict[startId] = None
         for i in range(len(self.vertices)):
             distanceDict[i]=-1
         distanceDict[startId]=0
@@ -120,13 +122,20 @@ class Graph:
                 if vertex in verticeSet:
                     if distanceDict[vertex]==-1 or self.getDistance(current, vertex)<distanceDict[vertex]:
                         distanceDict[vertex]=self.getDistance(current, vertex)
+                        predDict[vertex] = current
             minDistance=-1
             #this could be avoided if using priority queue
             for vertex, distance in distanceDict.items():
                 if vertex in verticeSet and (minDistance==-1 or distance<minDistance):
                     minDistance=distance
                     current=vertex
+        print("Shortest path distances:")
         print(distanceDict)   
+        print("Predecessors")
+        print(predDict)
+    
+    #bellman-ford algorithm
+
 
 
 
