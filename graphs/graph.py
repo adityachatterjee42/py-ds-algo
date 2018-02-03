@@ -157,11 +157,7 @@ class Graph:
         print("Predecessors")
         print(pred)
 
-
-
-
-
-
+    #prim's algorithm (minimum spanning tree)
 
 
 if __name__=='__main__':
