@@ -1,7 +1,7 @@
 from queue import Queue
 #a simple weighted, directed graph implementation with support for common graph algorithms
-#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest paths, dijkstra's
-#pending: dfs topological ordering, bellman-ford, prim's, kruskal's 
+#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest paths, dijkstra's, bellman-ford
+#pending: dfs topological ordering, prim's, kruskal's 
 class Vertex:
     def __init__(self, i):
         self.id = i
@@ -135,6 +135,30 @@ class Graph:
         print(predDict)
     
     #bellman-ford algorithm
+    def bellmanford(self, startID):
+        dists = {}
+        pred = {}
+        pred[startID] = None
+        for vertex in self.getVertices():
+            dists[vertex.id]=None
+        dists[startID]=0
+        isChange=1
+        while(isChange):
+            isChange=0
+            for vertex in self.getVertices():
+                if dists[vertex.id]!=None:
+                    for neighbor in vertex.getNeighbors():
+                        if dists[neighbor] == None or dists[neighbor]>dists[vertex.id]+self.adjMatrix[vertex.id][neighbor]:
+                            dists[neighbor] = dists[vertex.id]+self.adjMatrix[vertex.id][neighbor]
+                            pred[neighbor] = vertex.id
+                            isChange=1
+        print("Shortest path distances:")
+        print(dists)   
+        print("Predecessors")
+        print(pred)
+
+
+
 
 
 
@@ -154,5 +178,6 @@ if __name__=='__main__':
     #G.bfs(1)
     #G.kahn()
     #G.unwtSP(1)
-    G.dijkstra(0)
+    #G.dijkstra(0)
+    G.bellmanford(0)
     
