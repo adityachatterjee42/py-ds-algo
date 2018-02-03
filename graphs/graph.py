@@ -1,7 +1,7 @@
 from queue import Queue
 #a simple weighted, directed graph implementation with support for common graph algorithms
-#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest path
-#pending: topo sort, dijkstra's, bellman-ford's, prim's, kruskal's 
+#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest paths
+#pending: dfs topological ordering, dijkstra's, bellman-ford's, prim's, kruskal's 
 class Vertex:
     def __init__(self, i):
         self.id = i
@@ -27,6 +27,8 @@ class Graph:
             for j in range(self.totNodes):
                 print(self.adjMatrix[i][j], end='\t')
             print()
+    def getDistance(self, x, y):
+        return self.adjMatrix[x][y]
     def getVertices(self):
         return self.vertices
     def getVertex(self, id):
@@ -103,23 +105,38 @@ class Graph:
                     q.put(neighbor)
         for x,y in distanceDict.items():
             print("Vertex:{0} Distance{1}".format(x,y))
-
-
     
+    #dijkstra's algorithm
+    def dijkstra(self, startId):
+        verticeSet = set([vertex.id for vertex in self.getVertices()])
+        distanceDict = {} 
+        for i in range(len(self.vertices)):
+            distanceDict[i]=-1
+        distanceDict[startId]=0
+        current = startId
+        while(verticeSet):
+            verticeSet.remove(current)
+            for vertex in self.getVertex(current).getNeighbors():
+                if vertex in verticeSet:
+                    if distanceDict[vertex]==-1 or self.getDistance(current, vertex)<distanceDict[vertex]:
+                        distanceDict[vertex]=self.getDistance(current, vertex)
+            minDistance=-1
+            #this could be avoided if using priority queue
+            for vertex, distance in distanceDict.items():
+                if vertex in verticeSet and (minDistance==-1 or distance<minDistance):
+                    minDistance=distance
+                    current=vertex
+        print(distanceDict)   
 
 
-    
+
 
 if __name__=='__main__':
-    G = Graph(5)
+    G = Graph(3)
     #G.printAdjMatrix()
-    G.addEdge(1,0,0)
-    G.addEdge(1,2,0)
-    G.addEdge(0,3,0)
-    G.addEdge(2,4,0)
-    G.addEdge(0,2,0)
-    G.addEdge(3,2,0)
-    #G.addEdge(1,4,0)
+    G.addEdge(0,1,1)
+    G.addEdge(0,2,5)
+    G.addEdge(1,2,2)
     print('adjacency matrix')
     G.printAdjMatrix()
     #print('dfs')
@@ -127,5 +144,6 @@ if __name__=='__main__':
     #print('bfs')
     #G.bfs(1)
     #G.kahn()
-    G.unwtSP(1)
+    #G.unwtSP(1)
+    G.dijkstra(0)
     
