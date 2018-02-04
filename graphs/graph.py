@@ -1,7 +1,9 @@
 from queue import Queue
 #a simple weighted, directed graph implementation with support for common graph algorithms
-#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest paths, dijkstra's, bellman-ford
-#pending: dfs topological ordering, prim's, kruskal's 
+#please note that the algorithms implemented are not optimal 
+#there are several instances where using a different data structure (eg. a priority queue) would improve efficiency
+#implemented: bfs, dfs, kahn's topological ordering, unweighted shortest paths, dijkstra's, bellman-ford, prims algorithm
+#pending: dfs topological ordering, kruskal's 
 class Vertex:
     def __init__(self, i):
         self.id = i
@@ -158,14 +160,31 @@ class Graph:
         print(pred)
 
     #prim's algorithm (minimum spanning tree)
+    def prim(self, startID):
+        visited = set()
+        edges = []
+        visited.add(startID)
+        while(len(visited)<=len(self.vertices)-1):
+            shortest = None
+            for vertex in visited:
+                for neighbor in self.getVertex(vertex).getNeighbors():
+                    if neighbor not in visited and (shortest == None or self.adjMatrix[vertex][neighbor]<shortest):
+                        shortest = self.adjMatrix[vertex][neighbor]
+                        nextVertex = neighbor
+                        curVertex = vertex
+            visited.add(nextVertex)
+            edges.append((curVertex, nextVertex))
+        print(edges)
 
 
 if __name__=='__main__':
-    G = Graph(3)
+    G = Graph(5)
     #G.printAdjMatrix()
     G.addEdge(0,1,1)
     G.addEdge(0,2,5)
     G.addEdge(1,2,2)
+    G.addEdge(2,3,6)
+    G.addEdge(3,4,2)
     print('adjacency matrix')
     G.printAdjMatrix()
     #print('dfs')
@@ -175,5 +194,6 @@ if __name__=='__main__':
     #G.kahn()
     #G.unwtSP(1)
     #G.dijkstra(0)
-    G.bellmanford(0)
+    #G.bellmanford(0)
+    G.prim(0)
     
