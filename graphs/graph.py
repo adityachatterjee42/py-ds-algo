@@ -176,6 +176,19 @@ class Graph:
             edges.append((curVertex, nextVertex))
         print(edges)
 
+    #kruskal's algorithm (minimum spanning tree)
+    def kruskal(self):
+        edgeDict = {}
+        for i in range(len(self.vertices)):
+            for j in range(len(self.vertices)):
+                if self.adjMatrix[i][j]!=-1:
+                    edgeDict[(i,j)]=self.adjMatrix[i][j]
+        print(list(edgeDict.values()))
+        #sorted(edgeDict, key=edgeDict.values())
+        print(edgeDict)
+
+
+
 
 if __name__=='__main__':
     G = Graph(5)
@@ -195,5 +208,6 @@ if __name__=='__main__':
     #G.unwtSP(1)
     #G.dijkstra(0)
     #G.bellmanford(0)
-    G.prim(0)
+    #G.prim(0)
+    G.kruskal()
     
