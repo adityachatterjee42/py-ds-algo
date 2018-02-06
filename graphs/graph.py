@@ -183,9 +183,23 @@ class Graph:
             for j in range(len(self.vertices)):
                 if self.adjMatrix[i][j]!=-1:
                     edgeDict[(i,j)]=self.adjMatrix[i][j]
-        print(list(edgeDict.values()))
-        #sorted(edgeDict, key=edgeDict.values())
-        print(edgeDict)
+        edges = set()
+        visited = set()
+        while(len(edges)<len(self.vertices)):
+            leastWeight = None
+            for edge, weight in edgeDict.items():
+                if edge[0] not in visited or edge[1] not in visited:
+                    if leastWeight == None or weight<leastWeight:
+                        leastWeight = weight
+                        nextEdge = edge
+            edges.add(nextEdge)
+            visited.add(nextEdge[0])
+            visited.add(nextEdge[1])
+            del edgeDict[nextEdge]
+        print(edges)
+    
+    
+
 
 
 
@@ -199,7 +213,7 @@ if __name__=='__main__':
     G.addEdge(2,3,6)
     G.addEdge(3,4,2)
     print('adjacency matrix')
-    G.printAdjMatrix()
+    #G.printAdjMatrix()
     #print('dfs')
     #G.dfs(1)
     #print('bfs')
