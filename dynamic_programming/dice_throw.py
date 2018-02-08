@@ -14,6 +14,6 @@ def dice_throw(sumleft, diceleft):
     memo[state] = ways
     return ways
 
-print(dice_throw(6,2))
+print(dice_throw(100,20))
 
 
