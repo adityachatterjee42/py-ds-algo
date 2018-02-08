@@ -59,6 +59,6 @@ def driver(n):
     nQueen(board,0)
     print(count)
             
-driver(8)
+driver(4)
 
     
